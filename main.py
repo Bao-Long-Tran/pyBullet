@@ -117,13 +117,16 @@ def data_generate_v2(rgbArr, segArr, depArr, width, height, numImg):
     cv2.imwrite(f"{LABELED_IMG}/bounding box image{str(numImg)}.jpg", img)
     return
 
-def setup_parameter_generate(Obj1_Pos, Obj1_Ori, Obj2_Pos, Obj2_Ori, Obj3_Pos, Obj3_Ori, Obj4_Pos, Obj4_Ori, cameraPosition, lightColor, numImg):
+def setup_parameter_generate(Obj1_Pos, Obj1_Ori, Obj2_Pos, Obj2_Ori, Obj3_Pos, Obj3_Ori, Obj4_Pos, Obj4_Ori,
+                             cameraPosition, cameraTarget, cameraUpvector, lightColor, numImg):
     f = open(f"{SETUP_PARAMETER}/image{str(numImg)}.txt", "w")
     f.write(f"Object 1 Position: {Obj1_Pos}, Object 1 Orientation: {Obj1_Ori}\n")
     f.write(f"Object 2 Position: {Obj2_Pos}, Object 1 Orientation: {Obj2_Ori}\n")
     f.write(f"Object 3 Position: {Obj3_Pos}, Object 1 Orientation: {Obj3_Ori}\n")
     f.write(f"Object 4 Position: {Obj4_Pos}, Object 1 Orientation: {Obj4_Ori}\n")
     f.write(f"Camera position: {cameraPosition}\n")
+    f.write(f"Camera Target Position: {cameraTarget}\n")
+    f.write(f"Camera Upvector: {cameraUpvector}\n")
     f.write(f"Light color: Red:{lightColor[0]}, Green:{lightColor[1]}, Blue:{lightColor[2]}\n")
     return
 
@@ -295,17 +298,17 @@ def dataGenerate(rgbArr, segArr, width, height, numImg):
 
 # ### ......The angle is measured in Radian
 
-object1_startPos = [0, 0, 0]
-object1_startOrientation = p.getQuaternionFromEuler([0, 0, 0])
+object1_startPos = [-0.2, 0.02, 0]
+object1_startOrientation = p.getQuaternionFromEuler([0, 3.14/2, 1.2*3.14/4])
 
-object2_startPos = [0.1, 0.1, 0]
-object2_startOrientation = p.getQuaternionFromEuler([0, 0, 1.2*3.14/4])
+object2_startPos = [0.25, -0.1, 0]
+object2_startOrientation = p.getQuaternionFromEuler([0, 3.14/2, 2.5*3.14/4])
 
-object3_startPos = [-0.03, -0.15, 0]
-object3_startOrientation = p.getQuaternionFromEuler([0, 0, 0.6*3.14])
+object3_startPos = [-0.03, -0.05, -0.045]
+object3_startOrientation = p.getQuaternionFromEuler([0, 0, 0])
 
-object4_startPos = [0.2, -0.16, 0]
-object4_startOrientation = p.getQuaternionFromEuler([0, 0, 0.28*3.14])
+object4_startPos = [0.1, 0.02, -0.03]
+object4_startOrientation = p.getQuaternionFromEuler([0, 0, 0.15*3.14])
 
 # ######........... Setup objects...........####
 object1 = p.loadURDF("./objects/002_master_chef_can/002_master_chef_can.urdf", object1_startPos, object1_startOrientation)
@@ -315,21 +318,44 @@ object4 = p.loadURDF("./objects/005_tomato_soup_can/005_tomato_soup_can.urdf", o
 
 # #####..............SETUP BACKGROUND.......####
 # Setup background floor (Texture supports png format not jpg format)
-BG1_startPos = [0, 0, 0]
-BG1_startOri = p.getQuaternionFromEuler([3.14/2, 0, 0])
-p.loadURDF("./objects/back_ground_model/Paper/Paper.urdf", BG1_startPos, BG1_startOri, globalScaling=0.1)
+# BG1_startPos = [0, 0.4, -0.18]
+# BG1_startOri = p.getQuaternionFromEuler([3.14/2, 0, 0])
+# Sofa = p.loadURDF("./objects/back_ground_model/sofa/sofa.urdf", BG1_startPos, BG1_startOri, globalScaling=0.6)
+# texSofa = p.loadTexture("./objects/back_ground_model/sofa/sofa.png")
+# p.changeVisualShape(Sofa, -1, textureUniqueId = texSofa)
 
-BG2_startPos = [0, 0, 0]
+BG2_startPos = [0, 0, -0.45]
 BG2_startOri = p.getQuaternionFromEuler([0, 0, 3.14/2])
 planeUid = p.loadURDF("./objects/back_ground_model/rug/rug.urdf", BG2_startPos, BG2_startOri, globalScaling=1)
 texUid = p.loadTexture("./objects/back_ground_model/rug/rug 4.png")
 p.changeVisualShape(planeUid, -1, rgbaColor=[0.57, 0.42, 0.36, 1])
 
+BG3_startPos = [0.08, -0.1, -0.02]
+BG3_startOri = p.getQuaternionFromEuler([0, 0, 3.14/2])
+p.loadURDF("objects/012_strawberry/012_strawberry.urdf", BG3_startPos, BG3_startOri, globalScaling=2)
+
+BG4_startPos = [-0.25, -0.11, -0.03]
+BG4_startOri = p.getQuaternionFromEuler([0, 0, 3.14/3])
+p.loadURDF("./objects/013_apple/013_apple.urdf", BG4_startPos, BG4_startOri, globalScaling=1.2)
+
+BG5_startPos = [0, 0, -0.25]
+BG5_startOri = p.getQuaternionFromEuler([3.14/2, 0, 3.14/2])
+Table = p.loadURDF("./objects/back_ground_model/Table/Table.urdf", BG5_startPos, BG5_startOri, globalScaling=0.004)
+texTable = p.loadTexture("./objects/back_ground_model/Table/floor.png")
+p.changeVisualShape(Table, -1, textureUniqueId = texTable)
+
+BG6_startPos = [1.5, 2.0, -0.2]
+BG6_startOri = p.getQuaternionFromEuler([3.14/2, 0, 0])
+chair = p.loadURDF("./objects/back_ground_model/Armchair/Armchair.urdf", BG6_startPos, BG6_startOri, globalScaling=0.3)
+texChair = p.loadTexture("./objects/back_ground_model/Armchair/Armchair2.png")
+p.changeVisualShape(chair, -1, textureUniqueId = texChair)
+
+# ####........
 start_time = time.process_time()
 
 #set the center of mass frame (loadURDF sets base link frame) startPos/Ornp.resetBasePositionAndOrientation(boxId, startPos, startOrientation)
 
-imgIndex = 0
+imgIndex = 26460
 
 for x in range (0, NUM_X_STEP):
     for y in range (0, NUM_Y_STEP):
@@ -337,21 +363,19 @@ for x in range (0, NUM_X_STEP):
             for r in range (0, NUM_RED_STEP):
                 for g in range (0, NUM_GREEN_STEP):
                     for b in range (0, NUM_BLUE_STEP):
-                        # ###... Setup camera position ...###
-                        # camera_position = [MIN_X_DISTANCE + x * X_STEP,
-                        #                    MIN_Y_DISTANCE + y * Y_STEP,
-                        #                    MIN_Z_DISTANCE + z * Z_STEP]
-
-                        camera_position =   [-0.4, 0.258714, 0.25]
+                        ###... Setup camera position ...###
+                        camera_position = [MIN_X_DISTANCE + x * X_STEP,
+                                           MIN_Y_DISTANCE + y * Y_STEP,
+                                           MIN_Z_DISTANCE + z * Z_STEP]
+                        camera_TargetPosition = [0.0, 0, 0.0]
+                        camera_UpVector = [0, 0.08, 1.5]
 
                         # ###... Setup light color ... ###
                         Light_color = [RED_MIN + r * RED_STEP, GREEN_MIN + g * GREEN_STEP, BLUE_MIN + b * BLUE_STEP]
 
-                        print(f"[{imgIndex}] Camera position: {camera_position}")
-
                         viewMatrix = p.computeViewMatrix(cameraEyePosition=camera_position,
-                                                         cameraTargetPosition=[0.0, 0, 0.02],
-                                                         cameraUpVector=[0, 0.08, 1.3])
+                                                         cameraTargetPosition=camera_TargetPosition,
+                                                         cameraUpVector=camera_UpVector)
                         projectionMatrix = p.computeProjectionMatrixFOV(fov=62.0, aspect=1.275, nearVal=0.1, farVal=3.5)
 
                         width, height, rgbImg, depthImg, segImg = p.getCameraImage(width=640, height=480,
@@ -363,8 +387,11 @@ for x in range (0, NUM_X_STEP):
                                                                                    renderer=p.ER_TINY_RENDERER,
                                                                                    flags=p.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX)
 
+                        print("view Matrix")
+                        print(viewMatrix)
+
                         imgIndex = imgIndex + 1
-                        # dataGenerate(rgbImg, segImg, width, height, imgIndex)
+                        print(f"[{imgIndex}] Camera position: {camera_position}")
                         if include_depth:
                             data_generate_v2(rgbImg, segImg, depthImg, width, height, imgIndex)
                         else:
@@ -373,17 +400,14 @@ for x in range (0, NUM_X_STEP):
                                                  object2_startPos, object2_startOrientation,
                                                  object3_startPos, object3_startOrientation,
                                                  object4_startPos, object4_startOrientation,
-                                                 camera_position, Light_color, imgIndex)
-                        # print("writing and labeling image " + str(imgIndex))
-
-                        # object1_pos, object1_Ori = p.getBasePositionAndOrientation(object1)
-                        # print("object 1 position ", object1_pos,  ", object 1 orientation", object1_Ori)
+                                                 camera_position,
+                                                 camera_TargetPosition, camera_UpVector,
+                                                 Light_color, imgIndex)
 
 end_time = time.process_time()
 print("generate " + str(NUM_Y_STEP * NUM_Y_STEP * NUM_Z_STEP) + " images in " + str(end_time - start_time) + "s")
 
 p.disconnect()
-
 
 
 

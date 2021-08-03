@@ -2,5 +2,7 @@ Object 1 Position: [0, 0, 0], Object 1 Orientation: (0.0, 0.0, 0.0, 1.0)
 Object 2 Position: [0.1, 0.1, 0], Object 1 Orientation: (0.0, 0.0, 0.4537776270755451, 0.891114956201324)
 Object 3 Position: [-0.03, -0.15, 0], Object 1 Orientation: (0.0, 0.0, 0.8087360605531302, 0.588171730331375)
 Object 4 Position: [0.2, -0.16, 0], Object 1 Orientation: (0.0, 0.0, 0.4255775303352056, 0.9049219666213144)
-Camera position: [-0.4, 0.258714, 0.25]
+Camera position: [-0.4, -0.4, 0.25]
+Camera Target Position: [0.0, 0, 0.0]
+Camera Upvector: [0, 0.08, 1.5]
 Light color: Red:0.6666666666666666, Green:1.0, Blue:1.0
